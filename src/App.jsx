@@ -11,7 +11,7 @@ import MovieCard from "./components/MovieCard";
 import Search from "./components/Search";
 import { useState, useEffect, useRef } from "react";
 
-import WatchList from "./components/watchList";
+import WatchList from "./components/WatchList";
 
 import TrendingMovies from "./components/TrendingMovies";
 import ScrollTrigger from "gsap/ScrollTrigger";
