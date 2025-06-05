@@ -1,22 +1,27 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { getWatchList } from "../appwrite2";
+
+import { deleteWatchList } from "../appwrite2";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import ScrollTrigger from "gsap/ScrollTrigger";
+import Spinner from "./Spinner";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const WatchList = () => {
   const [clicked, setClicked] = useState(false);
   const [watchlist, setWatchlist] = useState([]);
-  const scrollRef = useRef([]);
-  useEffect(() => {
-    const fetchWatchList = async () => {
-      const list = await getWatchList();
-      setWatchlist(list || []);
-    };
+const [loading, setLoading] = useState(false);
 
+  const scrollRef = useRef([]);
+  const fetchWatchList = async () => {
+    const list = await getWatchList();
+    setWatchlist(list || []);
+  };
+
+  useEffect(() => {
     fetchWatchList();
   }, []);
 
@@ -49,6 +54,13 @@ const WatchList = () => {
       scrollRef.current.push(el);
     }
   };
+ const handleclick = async (item) => {
+  setLoading(true); // start loading
+  await deleteWatchList(item.movie_id, "remove");
+  await fetchWatchList();
+  setLoading(false); // stop loading
+};
+
 
   return (
     <div
@@ -74,7 +86,7 @@ const WatchList = () => {
         />
       </svg>
       {clicked && (
-        <div className="hover_watchList absolute top-0 left-0 w-[400px] h-[600px] flex flex-col  bg-black bg-opacity-10 rounded-lg shadow-lg z-50 overflow-y-scroll">
+        <div className="hover_watchList absolute top-0 left-0 w-[400px] max-h-[600px] flex flex-col  bg-black bg-opacity-10 rounded-lg shadow-lg z-50 overflow-y-scroll">
           <div className="sticky top-0 z-20 bg-black/80 watchList-head flex justify-between px-4 py-2">
             <h2 className="text-3xl font-bold text-transparent bg-gradient-to-r from-pink-400 via-purple-500 to-indigo-500 bg-clip-text  mb-4">
               Your WatchList
@@ -100,12 +112,16 @@ const WatchList = () => {
             </div>
           </div>
 
+          {loading ? (
+  <Spinner/>
+) : (
+
           <ul className="flex flex-col gap-4 ">
             {watchlist.map((item, index) => (
               <li
                 ref={addToRefs}
                 key={item.id}
-                className="  flex justify-center h-[80px] align-center"
+                className="  flex justify-center h-[80px] align-center gap-2"
               >
                 <p className="text-yellow-500 text-lg ">{index + 1}.</p>
                 <p className="text-gray-200 w-[60%] text-lg">
@@ -117,9 +133,31 @@ const WatchList = () => {
                   className="rounded-lg h-[60px] w-[95px]"
                   alt="soon"
                 />
+                <div
+                  className="w-[25px] h-[25px] flex"
+                  onClick={(e) => {
+                    e.stopPropagation(); // ⛔ Stop it from closing the watchlist
+                    handleclick(item); // ✅ Delete logic
+                  }}
+                >
+                  <svg
+                    width="48"
+                    height="48"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="yellow"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="8" y1="12" x2="16" y2="12" />
+                  </svg>
+                </div>
               </li>
             ))}
-          </ul>
+          </ul>)}
         </div>
       )}
     </div>

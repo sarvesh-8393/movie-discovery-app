@@ -11,7 +11,7 @@ const databases = new Databases(client);
 
 export const addToWatchList = async (movie,  action) => {
   try {
-
+console.log("i am inside")
     if (action === "add") {
       await databases.createDocument(
         DATABASE_ID,
@@ -40,6 +40,19 @@ export const addToWatchList = async (movie,  action) => {
     console.error("Error updating search count:", error.message);
   }
 };
+export const deleteWatchList=async(movie_id)=>{
+    const result = await databases.listDocuments(DATABASE_ID, COLLECTION_ID, [
+        Query.equal("movie_id", movie_id),
+      ]);
+
+      if (result.documents.length > 0) {
+        const appwriteId = result.documents[0].$id;
+        await databases.deleteDocument(DATABASE_ID, COLLECTION_ID, appwriteId);
+      } else {
+        console.log("No document found to remove.");
+      }
+
+}
 
 export const getWatchList = async () => {
   try {
