@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
+
+
+
+@layer base {
+  body {
+    font-family: "DM Sans", serif;
+    font-optical-sizing: auto;
+    background: #030014;
+    overflow-x: hidden;
+
+
+  }}
+  .movieTitle{
+   
+    border-radius: 10px;
+    padding: 10px;
+    transition: transform 0.2s ease-in-out;
+  }
+  .pages{
+    padding: 10px;
+    align-self: center;
+    margin: 30px;
+  }
+  .hero{
+    margin-top:150px;
+  }
+  .moviec{
+    margin-top: 50px;
+  }
+  .hero_text{
+    padding: 5px;
+  }
+  .all_movies{
+ margin-left: 150px;
+  }
+  .trnd_search{
+    margin: 20px;
+  }
+
+.watchlist{
+  margin: 20px;
+}
+.watchList-head{
+  padding:20px
+}
+/* index.css or global.css */
+::-webkit-scrollbar {
+  width: 6px; /* slim scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* no track */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #111; /* minimal black thumb */
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #222; /* slight hover feedback */
+}
